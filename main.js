@@ -3,23 +3,6 @@ const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv
 
-var compareThrows = function(p1, p2) { //p1,p2 are the player objects
-
-    if (p1.roll === p2.roll) {return}//this is a tie
-    else if (p1.roll === 'rock') {
-        if (p2.roll === 'paper') {return p2.win = true}
-        else {return p1.win = true}
-     }
-    else if (p1.roll === 'paper') {
-        if (p2.roll === 'scissors') {return p2.win = true}
-        else {return p1.win = true}
-    }
-    else if (p1.roll === 'scissors') {
-        if (p2.roll === 'rock') {return p2.win = true}
-        else {return p1.win = true}
-    }
-} //end of compareThrows 
-
 class Outputs { //class with static methods
     
     static badThrow () {//similar to throwing an error
@@ -51,9 +34,7 @@ class Player {
 
 class Throw {    //Object of static methods
     static screenThrow(player) {
-       //get the input from the screen. assumes the 
-        // this.outcome = screenInput
-        this.randomThrow(player);
+        return player.roll = argv.move;
     };
 
     static randomThrow(player) {
@@ -62,17 +43,38 @@ class Throw {    //Object of static methods
         else if (rn <=.66) {return player.roll = 'paper'}
         else {return player.roll = 'scissors'}
     }
+
+    static compareThrows (p1, p2) { //p1,p2 are the player objects
+
+        if (p1.roll === p2.roll) {return}//this is a tie
+        else if (p1.roll === 'rock') {
+            if (p2.roll === 'paper') {return p2.win = true}
+            else {return p1.win = true}
+         }
+        else if (p1.roll === 'paper') {
+            if (p2.roll === 'scissors') {return p2.win = true}
+            else {return p1.win = true}
+        }
+        else if (p1.roll === 'scissors') {
+            if (p2.roll === 'rock') {return p2.win = true}
+            else {return p1.win = true}
+        }
+    } //end of compareThrows 
+    
 }; //end of class Throw
 
 //let's play the game!
 
 const player1 = new Player('Player');
 const player2 = new Player('Computer');
-// $ node main.js --move=rock
-Throw.screenThrow(player1);//get input from terminal --move=rock (paper or scissors)
+
+player1.roll = argv.move;
+// Throw.screenThrow(player1);//get input from terminal --move=rock (paper or scissors)
 Throw.randomThrow(player2);
-compareThrows(player1, player2);
+Throw.compareThrows(player1, player2);
+
 console.log(Outputs.playGame());
 console.log(Outputs.logThrow(player1));
 console.log(Outputs.logThrow(player2));
 console.log(Outputs.announceWinner(player1, player2))
+// $ node main.js --move=rock
